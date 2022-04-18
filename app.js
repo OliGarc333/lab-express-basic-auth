@@ -9,6 +9,7 @@ const serveFavicon = require('serve-favicon');
 const baseRouter = require('./routes/base');
 const expressSession = require('express-session');
 const MongoStore = require('connect-mongo');
+const deserializeUser = require('./middleware/deserialize-user');
 
 const app = express();
 
@@ -33,18 +34,20 @@ app.use(express.urlencoded({ extended: true }));
 
 app.use(
   expressSession({
-    secret: 'abcafsdfagfsafads',
+    secret: 'oiuownnbkjgasdfsgfdsg',
     saveUninitialized: false,
     resave: false,
     cookie: {
       maxAge: 1 * 24 * 60 * 60 * 1000
     },
     store: MongoStore.create({
-      mongoUrl: 'mongodb://localhost:27017/node-basic-authentication',
-      ttl: 60 * 60
+      mongoUrl: 'mongodb://127.0.0.1:27017/lab-express-basic-auth',
+      ttl: 60 * 60 // Time to live
     })
   })
 );
+
+app.use(deserializeUser);
 
 app.use('/', baseRouter);
 
